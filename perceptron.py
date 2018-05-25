@@ -1,58 +1,53 @@
-from sklearn.linear_model import Perceptron
-from charas import *
-
-# USING SCIKIT LEARN 
-# learning_rate = 0
-# train_data = [eight,enter,man,destruction,to_assemble,perish]
-# labels = ["eight", "enter", "man", "destruction", "to assemble", "perish"]
-
-# for i in range(1,11):
-# 	learning_rate = i/10
-
-# 	print("learning rate:", learning_rate)
-# 	p = Perceptron(eta0=learning_rate)
-# 	p.fit(train_data, labels)
-
-# 	a = p.predict(train_data)
-# 	print(a)
-
-
-
 import random
-x = [eight,enter,man,destruction,to_assemble,perish]
-t = [[0,0,0],[0,0,1],[0,1,0],[0,1,1],[1,0,0],[1,0,1]] #desired outputs
-w = [] # weights
-y = [] # gotten outputs
-a = 1 # learning rate
+import numpy as np
+import copy
 
-threshold = 1
+class custom_perceptron:
+	def __init__(self,x,t,a,theta):
+		self.x = copy.deepcopy(x) #input patterns
+		self.t = t[:] #desired outputs
+		self.a = a #learning rate
+		self.theta = theta
+		self.y = 0 # gotten output
+		self.w = [] # weights
 
-# append -1 to each data set
-for data in x:
-	data.append(-1)
-	w.append(random.randint(0,9)/10)
-	y.append([])
+		for i in range(len(self.x[0])):
+			self.w.append(random.randint(0,9)/10) #random starting weights
+		self.w.append(theta)
 
-print(y)
+		# append -1 to each data set
+		for data in self.x:
+			data.append(-1)
 
-w.append(threshold)
-print(w)
-i = 0
+	def train(self, iterations):
+		"""Train the perceptron, running iterations amount of times """
+		for n in range(iterations):
+			for j in range(0 ,len(self.x)): #for each input x
+				if np.dot(self.x[j],self.w) > 0:
+					# find dot product of each input see if there is a fire
+					self.y = 1
+				else:
+					self.y = 0
 
-def all_equal(correct,outputs):
-	all_in = True
+				if self.y != self.t[j]:
+					# if output is not the desired output, update weights
+					for i1 in range(len(self.w)):
+						self.w[i1] = self.w[i1] + self.a * (self.t[j] - self.y) * self.x[j][i1]
 
-	for a in correct:
-		if a not in outputs:
-			all_in = False
-			break
+	def predict(self, data):
+		"""Make a prediction about an input data"""
+		temp = data[:]
+		temp.append(-1) #augment data
 
-	return all_in
+		return np.dot(temp,self.w) > 0
 
-while(not all_equal(t,y)):
-	for j in range(0 ,len(x)):
-		y[j] = 
-		if not bool(set(y[j]).intersection(t[j])):
-			# if output is not the desired output, update weights
-			for i1 in range(len(w)):
-				w[i1] = w[i1] + a * (t[i1] − y[i1]) * x[i1],
+	def all_equal():
+		"""Checks if the weights work for all inputs and outputs."""
+		all_in = True
+
+		for j in range(0 ,len(x)): #for each input x
+			if np.dot(x[j],w) != t[j]: #not equal to desired output
+				all_in = False
+				break
+
+		return all_in
