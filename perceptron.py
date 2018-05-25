@@ -2,7 +2,7 @@ import random
 import numpy as np
 import copy
 
-class custom_perceptron:
+class Custom_perceptron:
 	def __init__(self,x,t,a,theta):
 		self.x = copy.deepcopy(x) #input patterns
 		self.t = t[:] #desired outputs
@@ -18,6 +18,15 @@ class custom_perceptron:
 		# append -1 to each data set
 		for data in self.x:
 			data.append(-1)
+
+	def set_a(self,a):
+		self.a = a
+
+	def set_theta(self,theta):
+		self.theta = theta
+
+	def get_weights(self):
+		return self.w
 
 	def train(self, iterations):
 		"""Train the perceptron, running iterations amount of times """
